@@ -1,0 +1,4 @@
+node_modules
+python-env
+__pycache__
+.next
