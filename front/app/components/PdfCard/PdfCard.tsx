@@ -30,8 +30,6 @@ export const PdfCard = ({ fileName, close, highlights }: { fileName: string, clo
 
 
   useEffect(() => {
-    console.log(highlights)
-    console.log(highlights?.page)
     document.getElementById("pageei_" + highlights?.page)?.scrollIntoView({
       behavior: "smooth"
     })
