@@ -17,45 +17,43 @@ export const Sidebar = () => {
       </Button>
 
       <div className="flex flex-col gap-2">
-        <h2 className="font-bold" >
+        <h2 className="font-bold">
           Hoje
         </h2>
-
         <ul className="flex flex-col gap-2">
-          <li>Como cancelar fatura </li>
-          <li>Como cancelar fatura </li>
-          <li>Como cancelar fatura </li>
-          <li>Como cancelar fatura </li>
-          <li>Como cancelar fatura </li>
+          <li className="truncate max-w-[290px]">Solicitação de Cancelamento de Fatura</li>
+          <li className="truncate max-w-[290px]">Dúvida Sobre Cancelamento de Fatura</li>
+          <li className="truncate max-w-[290px]">Como Cancelar a Fatura?</li>
+          <li className="truncate max-w-[290px]">Cancelamento de Fatura - Suporte</li>
+          <li className="truncate max-w-[290px]">Ajuda com Cancelamento de Fatura</li>
         </ul>
       </div>
 
       <div className="flex flex-col gap-2">
-        <h2 className="font-bold" >
-          Ontem:
+        <h2 className="font-bold">
+          Ontem
         </h2>
-
         <ul className="flex flex-col gap-2">
-          <li>Como cancelar fatura </li>
-          <li>Como cancelar fatura </li>
-          <li>Como cancelar fatura </li>
-          <li>Como cancelar fatura </li>
-          <li>Como cancelar fatura </li>
+          <li className="truncate max-w-[290px]">Pedido de Cancelamento de Fatura</li>
+          <li className="truncate max-w-[290px]">Informações Sobre Cancelamento de Fatura</li>
+          <li className="truncate max-w-[290px]">Dificuldades para Cancelar a Fatura</li>
+          <li className="truncate max-w-[290px]">Ajuda para Cancelar a Fatura</li>
+          <li className="truncate max-w-[290px]">Cancelamento de Fatura - Dúvidas</li>
         </ul>
       </div>
+
       <div className="flex flex-col gap-2">
-        <h2 className="font-bold" >
-          Ultima semana:
+        <h2 className="font-bold">
+          Última Semana
         </h2>
-
         <ul className="flex flex-col gap-2">
-          <li>Como cancelar fatura </li>
-          <li>Como cancelar fatura </li>
-          <li>Como cancelar fatura </li>
-          <li>Como cancelar fatura </li>
-          <li>Como cancelar fatura </li>
+          <li className="max-w-[290px] truncate">Perguntas Frequentes: Cancelamento...</li>
+          <li className="max-w-[290px] truncate">Problema com Cancelamento de Fatura</li>
+          <li className="max-w-[290px] truncate">Tutorial de Cancelamento de Fatura</li>
+          <li className="max-w-[290px] truncate">Passo a Passo para Cancelar a Fatura</li>
+          <li className="max-w-[290px] truncate">Cancelamento de Fatura - Guia Completo</li>
         </ul>
       </div>
-    </div >
+    </div>
   )
 }

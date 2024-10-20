@@ -1,4 +1,3 @@
-
 from typing import Optional, List
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -13,9 +12,19 @@ app = FastAPI(title="Chat API")
 class ChatRequest(BaseModel):
     prompt: str
 
+class DocumentHighlight(BaseModel):
+    source: str
+    page: int
+    chunk: int
+    start_char: int
+    end_char: int
+    text: str
+
+
 class ChatResponse(BaseModel):
     response: str
     sources: Optional[List[str]] = None
+    highlights: List[DocumentHighlight]
 
 DATA_DIR = "data/"
 
@@ -31,7 +40,6 @@ app.add_middleware(
 async def get_file(filename: str):
     # Construct the full file path
     file_path = os.path.join(DATA_DIR, filename)
-    print(file_path)
     
     # Check if the file exists
     if not os.path.isfile(file_path):
@@ -40,23 +48,17 @@ async def get_file(filename: str):
     # Return the file as a response
     return FileResponse(file_path)
 
-
 @app.post("/api/chat", response_model=ChatResponse)
 async def chat_endpoint(request: ChatRequest):
     try:
-        # Extract the prompt from the request and call query_rag
         query_text = request.prompt
         result = query_rag(query_text)
-        print(f"Received prompt: {result}")
         return ChatResponse(
             response=result.response_text,
-            sources=result.sources
+            sources=result.sources,
+            highlights=[highlight.model_dump() for highlight in result.highlights]
         )
 
-        #return ChatResponse(
-        #    response="limao arroz",
-        #    sources=["data/monopoly.pdf:"]
-        #)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

@@ -18,12 +18,14 @@ import Image from "next/image"
 type MsgType = {
   text: string
   sources: string[]
+  highlights: any[]
   isResponse: boolean
 }
 
 export default function Home() {
   const { setToast, resetChat, setResetChat } = useLayoutContext()
 
+  const [currentHigh, setCurrentHigh] = useState({})
   const [started, setStarted] = useState(false)
   const [chatHist, setChatHist] = useState<MsgType[]>([])
   const [input, setInput] = useState<string>("")
@@ -46,11 +48,11 @@ export default function Home() {
   const processChat = (data: Chat) => {
     const sources = data.sources.filter((item, index, arr) => arr.indexOf(item) === index)
 
-    setChatHist([...chatHist, { text: data.response, sources: sources, isResponse: true }])
+    setChatHist([...chatHist, { text: data.response, sources: sources, highlights: data.highlights, isResponse: true }])
   }
 
   const { mutate, isLoading } = useMutation(
-    ["mutateChat", { prompt: input }],
+    ["mutateChat", input],
     (data: MutateChat) => mutateChat({ data: data }),
     {
       onSuccess: (data) => {
@@ -72,7 +74,7 @@ export default function Home() {
           <HeaderCop />
           <div className={`${pdfUrl ? "ml-2" : "ml-28"}  h-full max-w-[1400px] flex flex-col justify-center gap-2 overflow-scroll`}>
 
-            <ChatHistory pdfUrl={pdfUrl} setPdfUrl={setPdfUrl} isLoading={isLoading} chatHist={chatHist} />
+            <ChatHistory setCurrentHigh={setCurrentHigh} pdfUrl={pdfUrl} setPdfUrl={setPdfUrl} isLoading={isLoading} chatHist={chatHist} />
             <div className="m-auto flex flex-row gap-2 w-[700px] p-2 mb-2">
               <Input
                 placeholder="Digite sua mensagem"
@@ -84,18 +86,19 @@ export default function Home() {
               <Button
                 className="bg-[#f5821e]"
                 onClick={() => {
+                  if (!input) return
                   mutate({
                     prompt: input,
                   })
                   setInput("")
-                  setChatHist([...chatHist, { text: input, sources: [], isResponse: false }])
+                  setChatHist([...chatHist, { text: input, sources: [], highlights: [], isResponse: false }])
                 }}>
                 <ArrowUpCircle />
                 Enviar</Button>
             </div>
           </div>
         </div>
-        {pdfUrl && (<PdfCard fileName={pdfUrl} close={() => {
+        {pdfUrl && (<PdfCard highlights={currentHigh} fileName={pdfUrl} close={() => {
           setPdfUrl("")
         }} />)}
       </div>
@@ -174,7 +177,7 @@ const HeaderCop = () => {
   )
 }
 
-const ChatHistory = ({ chatHist, isLoading, setPdfUrl, pdfUrl }: { isLoading: boolean; chatHist: MsgType[], setPdfUrl: React.Dispatch<React.SetStateAction<string>>; pdfUrl: string }) => {
+const ChatHistory = ({ chatHist, isLoading, setPdfUrl, pdfUrl, setCurrentHigh }: { isLoading: boolean; chatHist: MsgType[], setPdfUrl: React.Dispatch<React.SetStateAction<string>>; pdfUrl: string, setCurrentHigh: () => void }) => {
   return (
     <div className="flex flex-col h-full p-4 overflow-y-auto">
       <div className="flex-1 overflow-y-auto">
@@ -202,6 +205,10 @@ const ChatHistory = ({ chatHist, isLoading, setPdfUrl, pdfUrl }: { isLoading: bo
                               return
                             }
                             setPdfUrl(source.substring(5, source.length))
+                            const curhi = msg.highlights.find((item) => {
+                              return item.source == source.substring(0, source.length - 4)
+                            })
+                            setCurrentHigh(curhi)
                           }}
                           key={idx}>
                           <CardContent className="flex flex-row gap-2 mt-8 items-center">
@@ -234,6 +241,6 @@ const ChatHistory = ({ chatHist, isLoading, setPdfUrl, pdfUrl }: { isLoading: bo
           </div>
         )}
       </div>
-    </div>
+    </div >
   );
 };
