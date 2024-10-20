@@ -44,7 +44,9 @@ export default function Home() {
   }, [chatHist])
 
   const processChat = (data: Chat) => {
-    setChatHist([...chatHist, { text: data.response, sources: data.sources, isResponse: true }])
+    const sources = data.sources.filter((item, index, arr) => arr.indexOf(item) === index)
+
+    setChatHist([...chatHist, { text: data.response, sources: sources, isResponse: true }])
   }
 
   const { mutate, isLoading } = useMutation(
@@ -162,6 +164,10 @@ const HeaderCop = () => {
           <span className="font-bold">Matrícula: </span>
           09187409128
         </p>
+        <p>
+          <span className="font-bold">Status: </span>
+          Em Andamento
+        </p>
       </div>
     </div >
 
@@ -189,18 +195,18 @@ const ChatHistory = ({ chatHist, isLoading, setPdfUrl, pdfUrl }: { isLoading: bo
                     <strong className="text-gray-700">Fontes:</strong>
                     <ul className="flex flex-col list-disc list-inside gap-3">
                       {msg.sources.map((source, idx) => (
-                        <Card className="w-[300px] bg-gray-200 cursor-pointer"
+                        <Card className="w-[450px] bg-gray-200 cursor-pointer"
                           onClick={() => {
-                            if (pdfUrl === source.match(/\/(.*?)\:/)?.[1]) {
+                            if (pdfUrl === source.substring(5, source.length)) {
                               setPdfUrl("")
                               return
                             }
-                            setPdfUrl(source.match(/\/(.*?)\:/)?.[1] || "")
+                            setPdfUrl(source.substring(5, source.length))
                           }}
                           key={idx}>
                           <CardContent className="flex flex-row gap-2 mt-8 items-center">
                             <div className="flex flex-col w-full">
-                              <p className="font-bold">{source.match(/\/(.*?)\:/)?.[1]} </p>
+                              <p className="font-bold">{source.substring(5, source.length)} </p>
                               <p>Clique para ver a referencia</p>
                             </div>
                             <ExternalLink />

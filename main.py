@@ -45,18 +45,18 @@ async def get_file(filename: str):
 async def chat_endpoint(request: ChatRequest):
     try:
         # Extract the prompt from the request and call query_rag
-        #query_text = request.prompt
-        #result = query_rag(query_text)
-        #print(f"Received prompt: {result}")
-        #return ChatResponse(
-        #    response=result.response_text,
-        #    sources=result.sources
-        #)
-
+        query_text = request.prompt
+        result = query_rag(query_text)
+        print(f"Received prompt: {result}")
         return ChatResponse(
-            response="limao arroz",
-            sources=["data/monopoly.pdf:"]
+            response=result.response_text,
+            sources=result.sources
         )
+
+        #return ChatResponse(
+        #    response="limao arroz",
+        #    sources=["data/monopoly.pdf:"]
+        #)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

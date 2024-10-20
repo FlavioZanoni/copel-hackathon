@@ -29,7 +29,7 @@ def query_and_validate(question: str, expected_response: str):
         expected_response=expected_response, actual_response=response_text
     )
 
-    model = Ollama(model="llama3.2", base_url="http://localhost:8081")
+    model = Ollama(model="llama3.1", base_url="http://localhost:8081")
     evaluation_results_str = model.invoke(prompt)
     evaluation_results_str_cleaned = evaluation_results_str.strip().lower()
 
